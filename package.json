@@ -1,12 +1,13 @@
 {
-  "name": "agyorbit",
+  "name": "orbitswitch",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "tauri": "tauri",
-    "check": "biome check . && tsc --noEmit"
+    "check": "biome check . && tsc --noEmit",
+    "test": "bun test"
   },
   "dependencies": {
     "@tauri-apps/api": "2.12.1",

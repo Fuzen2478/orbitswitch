@@ -8,6 +8,16 @@ use serde::{Serialize, Serializer, ser::SerializeStruct};
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    #[error("the official client could not be located")]
+    ClientNotFound,
+    #[error("sign in to a subscription account in the official client first")]
+    SubscriptionLoginRequired,
+    #[error("sign in to this account in Claude Desktop, then import it to bind both clients")]
+    DesktopSignInRequired,
+    #[error("the active client's token expired; open the client to renew its sign-in")]
+    LiveTokenExpired,
+    #[error("credential rollback failed; reopen the client and sign in again")]
+    RollbackFailed,
     #[error("Antigravity is not installed or could not be located")]
     AntigravityNotFound,
     #[error("could not read the OAuth client from the installed Antigravity")]
@@ -18,7 +28,7 @@ pub enum Error {
     OAuthTimeout,
     #[error("authorization was denied: {0}")]
     OAuthDenied(String),
-    #[error("Google rejected the stored authorization; sign in again")]
+    #[error("The service rejected the stored authorization; sign in again")]
     TokenRevoked,
     #[error("network error: {0}")]
     Network(String),
@@ -26,10 +36,12 @@ pub enum Error {
     Http { endpoint: &'static str, status: u16 },
     #[error("credential store error: {0}")]
     SecretStore(String),
-    #[error("{0} Antigravity process(es) did not exit")]
+    #[error("{0} client process(es) did not exit")]
     ProcessStuck(usize),
-    #[error("failed to launch Antigravity: {0}")]
+    #[error("failed to launch the desktop client: {0}")]
     Launch(String),
+    #[error("account switched, but the desktop client could not be opened: {0}")]
+    LaunchAfterSwitch(String),
     #[error("account not found")]
     AccountNotFound,
     #[error("another operation is in progress")]
@@ -38,7 +50,7 @@ pub enum Error {
     Update(#[from] tauri_plugin_updater::Error),
     #[error("this update is no longer available; check again")]
     UpdateUnavailable,
-    #[error("app updates require an installed bundle; install AgyOrbit first")]
+    #[error("app updates require an installed bundle; install OrbitSwitch first")]
     UpdateNotInstalled,
     #[error("the written credential did not read back as the target account")]
     VerifyFailed,
@@ -51,6 +63,11 @@ pub enum Error {
 impl Error {
     pub fn code(&self) -> &'static str {
         match self {
+            Self::ClientNotFound => "client_not_found",
+            Self::SubscriptionLoginRequired => "subscription_login_required",
+            Self::DesktopSignInRequired => "desktop_sign_in_required",
+            Self::LiveTokenExpired => "live_token_expired",
+            Self::RollbackFailed => "rollback_failed",
             Self::AntigravityNotFound => "antigravity_not_found",
             Self::ClientDiscovery => "client_discovery",
             Self::OAuthCancelled => "oauth_cancelled",
@@ -62,6 +79,7 @@ impl Error {
             Self::SecretStore(_) => "secret_store",
             Self::ProcessStuck(_) => "process_stuck",
             Self::Launch(_) => "launch",
+            Self::LaunchAfterSwitch(_) => "launch_after_switch",
             Self::AccountNotFound => "account_not_found",
             Self::Busy => "busy",
             Self::Update(_) => "update",
@@ -70,6 +88,13 @@ impl Error {
             Self::VerifyFailed => "verify_failed",
             Self::Io(_) => "io",
             Self::Invalid(_) => "invalid",
+        }
+    }
+
+    pub fn after_switch(self) -> Self {
+        match self {
+            Self::Launch(message) => Self::LaunchAfterSwitch(message),
+            other => other,
         }
     }
 }
