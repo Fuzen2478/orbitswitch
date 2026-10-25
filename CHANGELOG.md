@@ -6,6 +6,8 @@ All notable changes to OrbitSwitch are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-25
+
 ### Added
 
 - Gemini / ChatGPT / Claude tabs with independent accounts and current-client state.
@@ -13,8 +15,10 @@ All notable changes to OrbitSwitch are documented here. The format follows
   switching. Claude Desktop is paired with Claude Code by verified account and workspace identity.
 - Native credential rollback and identity checks, stale-quota labels, model scopes and additional
   limit durations. Active clients retain ownership of their token refresh.
+- Codex quota windows follow the provider response, including weekly-only accounts. Only comparable
+  windows participate in account recommendations; the website demo follows the same rule.
 - A redesigned bilingual website with a fictional interactive three-platform demo and accurate
-  release download status.
+  release download status. Claude's demo separates shared usage from model-specific weekly limits.
 
 ### Changed
 
@@ -34,7 +38,12 @@ All notable changes to OrbitSwitch are documented here. The format follows
   temporary `Claude Code-credentials-<hash>` keychain entry if one was created. Do not remove the
   unsuffixed native credential or unrelated profile entries.
 
-New adapter verification limits are documented in [status](docs/status.md).
+### Verification scope
+
+- macOS and Windows CI passed. Installed-client identity and quota reads, including Claude Desktop
+  binding, were verified on macOS. Real Codex/Claude switching, browser enrollment, token renewal
+  and native Windows behavior remain **not verified**. See the complete
+  [verification scope](https://github.com/shengyy/orbitswitch/blob/v0.2.0/docs/status.md).
 
 ## [0.1.8] - 2026-10-16
 

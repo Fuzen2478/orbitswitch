@@ -15,7 +15,7 @@ verified.
 | Installer | Universal `.dmg` (Apple silicon and Intel), ad-hoc signed | NSIS `-setup.exe`, unsigned |
 | Verified on a real installation | Yes: macOS 27, Antigravity 2.19.1 | **Not verified** ([#3](https://github.com/shengyy/orbitswitch/issues/3)) |
 
-## Multi-platform adapters (Unreleased)
+## Multi-platform adapters
 
 - Read-only probes on macOS passed against Antigravity 2.26.0, Codex CLI 0.164.0 / desktop
   26.1021.31345, and Claude Code 2.1.310 / Desktop 3.6556.2.
@@ -26,15 +26,18 @@ verified.
   enrollment are **not verified**. No installed client's credential was rewritten for these probes.
 - Synthetic tests cover native CLI-file rollback, preserving unrelated settings and cookies, rejecting
   cookie-schema drift before deletion, failed rollback reporting, missing quota vs. zero and scoped
-  limit deduplication. These tests do not replace a real client switch.
+  limit deduplication, Codex weekly-only and dual-window responses, and recommendations across
+  compatible windows. These tests do not replace a real client switch.
 - Browser checks with fictional accounts passed for all three tabs in both languages and appearances,
   including confirmation routing, stale/empty/binding states and narrow layouts. The website passed
-  desktop and mobile layout, language and interactive-demo checks.
+  desktop and mobile layout, language and interactive-demo checks. App and website checks also cover
+  Pro weekly-only and Plus dual-window fixtures, without inventing absent windows. Claude's website
+  demo preserves shared usage and model-specific weekly limits.
 - Native Windows behavior is **not verified**. Standard installer paths are detected; Store/MSIX,
   independently configured profiles and app-bound cookie encryption are unsupported. CI compilation
   does not establish real account switching on Windows.
-- The first multi-platform release is not published. Website downloads identify 0.1.x as the legacy
-  Antigravity-only build rather than presenting it as the new three-tab product.
+- Website downloads follow the latest published release and identify 0.1.x as the legacy
+  Antigravity-only build rather than presenting it as the three-tab product.
 
 ## Verified on macOS (0.1.2)
 
