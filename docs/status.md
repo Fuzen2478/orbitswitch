@@ -38,6 +38,9 @@ Update this page in the same PR whenever verification scope changes.
 
 ## Synthetic and loopback verification
 
+- **Argon quota**: synthetic summary coverage keeps the shared weekly bucket separate from Gemini,
+  preserves reset times and proto3 omitted-zero handling, and gates loopback responses on the current
+  installed hub identity. Native installed-client verification of Argon remains **not verified**.
 - **Account storage upgrades**: merging earlier and current registries, retaining current grants and
   desktop bindings, honoring explicit native-account removals, original Google-only metadata,
   malformed/unsupported source rejection, missing grants, failed token writes/readback, failed
