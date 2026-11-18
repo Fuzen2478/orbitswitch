@@ -135,6 +135,7 @@ pub enum SwitchStep {
 #[serde(rename_all = "camelCase")]
 pub enum GroupKey {
     Gemini,
+    Argon,
     Claude,
     Other,
     Codex,

@@ -6,6 +6,11 @@ All notable changes to OrbitSwitch are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Show the reported Gemini 4 Argon weekly quota with its remaining percentage and reset time.
+  Use the installed Antigravity app's hub identity to request the eligible model groups.
+
 ## [0.2.4] - 2026-11-16
 
 ### Fixed

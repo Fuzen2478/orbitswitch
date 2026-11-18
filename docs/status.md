@@ -25,6 +25,10 @@ Update this page in the same PR whenever verification scope changes.
     switches with Antigravity reopening on the target account.
   - Installed-version `User-Agent` discovery from `Resources/app.asar`, returning both Gemini and
     Claude/GPT quota groups across Pro and Ultra accounts.
+  - Read-only quota and plan probes with the installed hub `User-Agent` returned a separate Argon
+    week for an eligible Pro account on 2.24.0 ([contributor verification](https://github.com/shengyy/orbitswitch/pull/27))
+    and on 2.32.2 (macOS 27.2.1). On 2.32.2, the tested Ultra Lite account listed Argon in the shared
+    Gemini group. Both tiers also returned the regular Gemini and Claude/GPT quota windows.
   - Independent plan and quota handling: an expired Pro account updates to `Free` even when quota
     returns HTTP 403.
   - Native menus, clipboard copy and Open at Login through SMAppService.
@@ -57,6 +61,9 @@ Update this page in the same PR whenever verification scope changes.
 
 ## Synthetic and loopback verification
 
+- **Argon quota**: synthetic coverage preserves reset times and proto3 omitted-zero handling. The
+  loopback check uses the current installed hub identity. The recommendation test covers accounts
+  where only one has a separate Argon week.
 - **Account storage upgrades**: merging earlier and current registries, retaining current grants and
   desktop bindings, honoring explicit native-account removals, original Google-only metadata,
   malformed/unsupported source rejection, missing grants, failed token writes/readback, failed

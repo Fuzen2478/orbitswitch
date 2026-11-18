@@ -9,8 +9,8 @@ internals live in [architecture.md](architecture.md); read-only verification com
 | Signed-in credential storage | 2.19.1–2.26.0, macOS 27 | `antigravity/live.rs` |
 | Credential bundle format | 2.19.1–2.26.0, macOS 27 | `antigravity/credential.rs` |
 | OAuth client and scopes | 2.19.1–2.26.0, macOS 27 | `antigravity/oauth_client.rs`, `google/oauth.rs` |
-| Installed version in `app.asar` | 2.23.1–2.26.0, macOS 27 | `antigravity/version.rs` |
-| Quota and plan endpoints | 2.19.1–2.26.0, macOS 27 | `google/cloudcode.rs` |
+| Installed version in `app.asar` | 2.23.1–2.26.0 and 2.32.2, macOS 27 | `antigravity/version.rs` |
+| Quota and plan endpoints | 2.19.1–2.26.0 and 2.32.2, macOS 27 | `google/cloudcode.rs` |
 | Processes holding the credential | 2.19.1–2.26.0, macOS 27 | `antigravity/process.rs` |
 | Windows equivalents | **not verified** | same modules |
 
@@ -61,13 +61,18 @@ fallback. OrbitSwitch reads the keyring first and writes both locations on switc
 
 Base URL: `https://daily-cloudcode-pa.googleapis.com/v1internal` (`POST` with bearer token).
 
-- **`User-Agent`**: `OrbitSwitch/<version> (antigravity/<installed-version>)`, where `<installed-version>`
-  is read from the root `package.json` inside `Resources/app.asar` on each refresh. An unversioned or
-  stale product token causes `:retrieveUserQuotaSummary` to omit the Gemini group; missing the
-  `antigravity` token entirely returns HTTP 403.
+- **`User-Agent`**: `OrbitSwitch/<version> (antigravity/hub/<installed-version>)`, where
+  `<installed-version>` is read from the root `package.json` inside `Resources/app.asar` on each
+  refresh. The `hub/` form returns the Antigravity app's model groups. An unversioned or stale
+  product token causes `:retrieveUserQuotaSummary` to omit the Gemini group. A request without
+  the `antigravity` token returns HTTP 403.
 - **`:retrieveUserQuotaSummary`** (`{}`): returns `groups[]` with `displayName`, `description`
   (`Models within this group: …`) and `buckets[]` (`window`: `5h` or `weekly`, `remainingFraction`,
   `resetTime`). Proto3 JSON omits `0`, so a bucket without `remainingFraction` is exhausted (`0.0`).
+  A dedicated `Gemini 4 Argon` group contains the shared `gemini-argon-wtu-weekly` bucket. Render
+  an Argon row when the summary includes that group. Argon can also appear in the reported model
+  list of the shared Gemini group. Eligibility follows the
+  [Antigravity model availability table](https://antigravity.google/docs/models#reasoning-model).
 - **`:loadCodeAssist`** (`{"metadata":{"ideType":"ANTIGRAVITY"}}`): returns `paidTier` and
   `currentTier`. `paidTier` takes precedence (`ultra` → Ultra, `pro` → Pro, `free-tier` or absent →
   Free). Plan and quota responses are handled independently so an expired subscription updates to
